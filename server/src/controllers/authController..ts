@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../model/user";
 
 import catchAsync from "../utils/catchAsync";
+import CustomError from "../utils/customError";
 import sendResponse from "../utils/sendResponse";
 
 export const signIn = catchAsync(async (req, res, next) => {
@@ -11,11 +12,11 @@ export const signIn = catchAsync(async (req, res, next) => {
   const user = await User.findOne({ email }).exec();
 
   if (!user) {
-    return next(new Error("User does not exist"));
+    return next(new CustomError("User does not exist", 401));
   }
 
   if (!(await user.comparePassword(password))) {
-    return next(new Error("You have entered an invalid password"));
+    return next(new CustomError("You have entered an invalid password", 401));
   }
 
   const token = jwt.sign({ id: user._id }, process.env.SECRET_JWT as string, {
