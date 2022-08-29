@@ -1,9 +1,9 @@
-import { Response } from 'express';
+import { Response } from "express";
 
-const sendResponse = (res: Response, statusCode: number, data: Data) => {
+const sendResponse = <T>(res: Response, statusCode: number, data: T) => {
   return res.status(statusCode).json({
-    status: `${statusCode}`.startsWith('4') ? 'fail' : 'success',
-    ...data
+    status: `${statusCode}`.startsWith("4") ? "fail" : "success",
+    ...data,
   });
 };
 
