@@ -13,6 +13,7 @@ interface IUser extends mongoose.Document {
   bannerURL?: string;
   odinTokens: number;
   createdAt: Date;
+  comparePassword: (enteredPassword: string) => Promise<boolean>;
 }
 
 const Schema = mongoose.Schema;
