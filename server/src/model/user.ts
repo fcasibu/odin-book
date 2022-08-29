@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
-interface IUser {
+interface IUser extends mongoose.Document {
   firstName: string;
   lastName: string;
   email: string;
@@ -64,6 +65,17 @@ const UserSchema = new Schema<IUser>({
     default: Date.now,
   },
 });
+
+UserSchema.pre("save", async function (next) {
+  this.password = await bcrypt.hash(this.password, 10);
+
+  this.passwordConfirm = undefined;
+  next();
+});
+
+UserSchema.methods.comparePassword = async function (enteredPassword: string) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model("User", UserSchema);
 
