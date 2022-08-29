@@ -39,24 +39,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", authRouter);
-
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
 interface ResponseError extends Error {
   status: number;
 }
 
 // error handler
 app.use((err: ResponseError, req: Request, res: Response) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
   res.status(err.status || 500).json({
     status: "fail",
     message: err.message,
-    stack: err.stack,
   });
 });
 
