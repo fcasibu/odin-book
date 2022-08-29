@@ -1,19 +1,27 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-export default async function initializeMongoServer() {
-  const mongoServer = await MongoMemoryServer.create();
+let mongoServer: MongoMemoryServer;
+
+const connect = async () => {
+  mongoServer = await MongoMemoryServer.create();
+
   const mongoUri = mongoServer.getUri();
-
   mongoose.connect(mongoUri);
+};
 
-  mongoose.connection.on("error", (e) => {
-    if (e.message.code === "ETIMEDOUT") {
-      mongoose.connect(mongoUri);
-    }
-  });
+const close = async () => {
+  await mongoose.disconnect();
+  await mongoServer.stop();
+};
 
-  mongoose.connection.once("open", () => {
-    console.log(`MongoDB successfully connected to ${mongoUri}`);
-  });
-}
+const clear = async () => {
+  const collections = mongoose.connection.collections;
+
+  for (const key in collections) {
+    const collection = collections[key];
+    await collection.deleteMany({});
+  }
+};
+
+export { connect, close, clear };
