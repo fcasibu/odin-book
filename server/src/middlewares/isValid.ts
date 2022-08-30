@@ -5,7 +5,7 @@ const isValid = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(200).json({
+    return res.status(401).json({
       previous: req.body,
       errors: errors.array().map((el) => ({ param: el.param, msg: el.msg })),
     });
