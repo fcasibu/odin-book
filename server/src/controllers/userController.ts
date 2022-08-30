@@ -21,3 +21,8 @@ export const updateUser = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { user });
 });
+
+export const deleteUser = catchAsync(async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.userID);
+  return sendResponse(res, 200, { user: null });
+});
