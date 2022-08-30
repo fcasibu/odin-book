@@ -99,3 +99,20 @@ describe("PATCH /api/users/:userID", () => {
       });
   });
 });
+
+describe("DELETE /api/users/:userID", () => {
+  it("should respond with null and should not be able to find the user", (done) => {
+    request(app)
+      .delete(`/api/users/${id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect(200)
+      .end(async (err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.user).toBeNull();
+        const deletedUser = await User.findById(id);
+        expect(deletedUser).toBeNull();
+        return done();
+      });
+  });
+});
