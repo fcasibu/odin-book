@@ -29,12 +29,12 @@ afterAll(async () => {
   jest.clearAllMocks();
 });
 
-describe('GET /api/users/:userID', () => {
+describe("GET /api/users/:userID", () => {
   it("should respond with a success status and correct user info", (done) => {
     request(app)
       .get(`/api/users/${id}`)
       .set("Authorization", `Bearer ${token}`)
-      .expect('Content-Type', /json/)
+      .expect("Content-Type", /json/)
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
@@ -47,4 +47,55 @@ describe('GET /api/users/:userID', () => {
         return done();
       });
   });
-})
+});
+
+describe("PATCH /api/users/:userID", () => {
+  it("should respond with a success status and an updated user info", (done) => {
+    request(app)
+      .patch(`/api/users/${id}`)
+      .set("Authorization", `Bearer ${token}`)
+      .type("form")
+      .send({
+        firstName: "john",
+        lastName: "doe",
+        bio: "test bio",
+        password: "asdf1234",
+      })
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.user).toBeTruthy();
+        expect(res.body.user.firstName).toMatch(/john/i);
+        expect(res.body.user.lastName).toMatch(/doe/i);
+        expect(res.body.user.bio).toMatch(/test bio/i);
+        return done();
+      });
+  });
+  it("should not update odinTokens and image fields", (done) => {
+    request(app)
+      .patch(`/api/users/${id}`)
+      .type("form")
+      .send({
+        ...user,
+        odinTokens: 10000,
+        bannerURL: "example.com",
+        avatarURL: "example.com",
+        email: "new@test.com",
+      })
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.user).toBeTruthy();
+        expect(res.body.user.odinTokens).not.toBe(10000);
+        expect(res.body.user.email).not.toBe("new@test.com");
+        expect(res.body.user.bannerURL).toBeUndefined();
+        expect(res.body.user.avatarURL).toBeUndefined();
+        done(err);
+      });
+  });
+});
