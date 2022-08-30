@@ -53,14 +53,14 @@ describe("PATCH /api/users/:userID", () => {
   it("should respond with a success status and an updated user info", (done) => {
     request(app)
       .patch(`/api/users/${id}`)
-      .set("Authorization", `Bearer ${token}`)
       .type("form")
       .send({
+        ...user,
         firstName: "john",
         lastName: "doe",
         bio: "test bio",
-        password: "asdf1234",
       })
+      .set("Authorization", `Bearer ${token}`)
       .expect("Content-Type", /json/)
       .expect(200)
       .end((err, res) => {
