@@ -39,7 +39,11 @@ export const signUp = catchAsync(async (req, res) => {
     passwordConfirm,
   });
 
-  return sendResponse(res, 201, { user });
+  const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY as string, {
+    expiresIn: "30d",
+  });
+
+  return sendResponse(res, 201, { user, token });
 });
 
 export const verify = [
