@@ -51,10 +51,6 @@ const UserSchema = new Schema<IUser>({
     type: String,
     minLength: 8,
   },
-  active: {
-    type: Boolean,
-    default: true,
-  },
   avatarURL: String,
   bannerURL: String,
   odinTokens: {
@@ -67,7 +63,7 @@ const UserSchema = new Schema<IUser>({
   },
 });
 
-UserSchema.pre("save", async function (next) {
+UserSchema.pre(/^(findOneAndUpdate|save)/i, async function (next) {
   this.password = await bcrypt.hash(this.password, 10);
 
   this.passwordConfirm = undefined;
