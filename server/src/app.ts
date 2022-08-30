@@ -1,5 +1,4 @@
-import createError from "http-errors";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import logger from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -7,6 +6,10 @@ import passport from "passport";
 import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
 import dotenv from "dotenv";
 dotenv.config();
+
+import User from "./model/user";
+import authRouter from "./routes/auth";
+import CustomError from "./utils/customError";
 
 const app = express();
 
@@ -35,24 +38,31 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
+app.use("/", authRouter);
 interface ResponseError extends Error {
   status: number;
 }
 
-// error handler
-app.use((err: ResponseError, req: Request, res: Response) => {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-
-  res.status(err.status || 500).json({
-    status: "fail",
-    message: err.message,
-    stack: err.stack,
-  });
+app.use((req, res, next) => {
+  next(new CustomError("Not Found", 404));
 });
+// error handler
+app.use(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (err: ResponseError, req: Request, res: Response, next: NextFunction) => {
+    if (process.env.NODE_ENV === "production") {
+      res.status(err.status).json({
+        status: "fail",
+        message: err.message,
+      });
+    } else {
+      res.status(err.status).json({
+        status: "fail",
+        message: err.message,
+        stack: err.stack,
+      });
+    }
+  }
+);
 
 export default app;
