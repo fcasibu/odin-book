@@ -1,4 +1,6 @@
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 
 import User from "../model/user";
 
@@ -19,7 +21,7 @@ export const signIn = catchAsync(async (req, res, next) => {
     return next(new CustomError("You have entered an invalid password", 401));
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.SECRET_JWT as string, {
+  const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY as string, {
     expiresIn: "30d",
   });
 
@@ -39,3 +41,10 @@ export const signUp = catchAsync(async (req, res) => {
 
   return sendResponse(res, 201, { user });
 });
+
+export const verify = [
+  passport.authenticate("jwt", { session: false }),
+  (req: Request, res: Response, next: NextFunction) => {
+    next();
+  },
+];
