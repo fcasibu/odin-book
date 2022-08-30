@@ -12,6 +12,6 @@ router.use(verify);
 router
   .route("/:userID")
   .get(getUser)
-  .patch(validateUpdateUser(), isValid, verify, updateUser);
+  .patch(validateUpdateUser(), isValid, updateUser);
 
 export default router;
