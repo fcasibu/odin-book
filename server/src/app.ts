@@ -9,6 +9,7 @@ dotenv.config();
 
 import User from "./model/user";
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
 import CustomError from "./utils/customError";
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", authRouter);
+app.use("/api/users", userRouter);
 interface ResponseError extends Error {
   status: number;
 }
