@@ -53,12 +53,12 @@ app.use(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (err: ResponseError, req: Request, res: Response, next: NextFunction) => {
     if (process.env.NODE_ENV === "production") {
-      res.status(err.status).json({
+      res.status(err.status || 500).json({
         status: "fail",
         message: err.message,
       });
     } else {
-      res.status(err.status).json({
+      res.status(err.status || 500).json({
         status: "fail",
         message: err.message,
         stack: err.stack,
