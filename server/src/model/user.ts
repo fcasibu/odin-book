@@ -53,7 +53,7 @@ const UserSchema = new Schema<IUser>({
   },
   active: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   avatarURL: String,
   bannerURL: String,
