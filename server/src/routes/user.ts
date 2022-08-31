@@ -1,7 +1,13 @@
 import express from "express";
 
 import { verify } from "../controllers/authController.";
-import { deleteUser, getUser, updateUser } from "../controllers/userController";
+import {
+  deleteUser,
+  deleteUserFriend,
+  getUser,
+  getUserFriends,
+  updateUser,
+} from "../controllers/userController";
 import isValid from "../middlewares/isValid";
 import { validateUpdateUser } from "../utils/validators";
 
@@ -14,5 +20,8 @@ router
   .get(getUser)
   .patch(validateUpdateUser(), isValid, updateUser)
   .delete(deleteUser);
+
+router.route("/:userID/friends").get(getUserFriends);
+router.route("/:userID/friends/:requestID").delete(deleteUserFriend);
 
 export default router;

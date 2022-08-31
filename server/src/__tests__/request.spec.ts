@@ -139,3 +139,34 @@ describe("PATCH /api/requests/:senderID", () => {
       });
   });
 });
+
+describe("GET /api/users/:userID/friends", () => {
+  it("user1 should have one friend which is user2", (done) => {
+    request(app)
+      .get(`/api/users/${user1Id}/friends`)
+      .set("Authorization", `Bearer ${user1Token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.friends).toBeTruthy();
+        expect(res.body.friends).toHaveLength(1);
+        return done();
+      });
+  });
+  it("user2 should have one friend which is user1", (done) => {
+    request(app)
+      .get(`/api/users/${user2Id}/friends`)
+      .set("Authorization", `Bearer ${user1Token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.friends).toBeTruthy();
+        expect(res.body.friends).toHaveLength(1);
+        return done();
+      });
+  });
+});
