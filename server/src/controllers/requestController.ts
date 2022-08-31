@@ -37,3 +37,14 @@ export const updateRequest = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { request });
 });
+
+export const deleteRequest = catchAsync(async (req, res, next) => {
+  const { id } = req.user as IUser;
+  await Request.findOneAndDelete({
+    receiver: id,
+    sender: req.params.senderID,
+    status: "Pending",
+  });
+
+  return sendResponse(res, 200, { request: null });
+});
