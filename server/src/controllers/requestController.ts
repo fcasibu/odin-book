@@ -33,7 +33,7 @@ export const updateRequest = catchAsync(async (req, res, next) => {
     { receiver: id, sender: req.params.senderID },
     { status: "Accepted" },
     { new: true }
-  );
+  ).exec();
 
   return sendResponse(res, 200, { request });
 });
@@ -44,7 +44,7 @@ export const deleteRequest = catchAsync(async (req, res, next) => {
     receiver: id,
     sender: req.params.senderID,
     status: "Pending",
-  });
+  }).exec();
 
   return sendResponse(res, 200, { request: null });
 });
