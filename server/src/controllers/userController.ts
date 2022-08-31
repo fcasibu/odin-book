@@ -46,3 +46,9 @@ export const getUserFriends = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { friends });
 });
+
+export const deleteUserFriend = catchAsync(async (req, res, next) => {
+  await Request.findByIdAndDelete(req.params.requestID);
+
+  return sendResponse(res, 200, null);
+});

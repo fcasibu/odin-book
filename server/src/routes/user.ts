@@ -3,6 +3,7 @@ import express from "express";
 import { verify } from "../controllers/authController.";
 import {
   deleteUser,
+  deleteUserFriend,
   getUser,
   getUserFriends,
   updateUser,
@@ -21,5 +22,6 @@ router
   .delete(deleteUser);
 
 router.route("/:userID/friends").get(getUserFriends);
+router.route("/:userID/friends/:requestID").delete(deleteUserFriend);
 
 export default router;
