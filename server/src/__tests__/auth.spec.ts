@@ -9,6 +9,7 @@ jest.mock("../utils/validators", () => {
   return {
     validateSignIn: jest.fn(() => []),
     validateSignUp: jest.fn(() => []),
+    validateUpdateUser: jest.fn(() => []),
   };
 });
 jest.mock("../middlewares/isValid", () => jest.fn((req, res, next) => next()));
@@ -54,7 +55,6 @@ describe("POST /api/signUp", () => {
         expect(res.body.user).toBeTruthy();
         expect(res.body.token).toBeTruthy();
         expect(res.body.user.odinTokens).toBe(500);
-        expect(res.body.user.active).toBeTruthy();
         expect(validateSignUp).toBeCalledTimes(1);
         return done();
       });

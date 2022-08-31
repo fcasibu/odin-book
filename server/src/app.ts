@@ -9,6 +9,7 @@ dotenv.config();
 
 import User from "./model/user";
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
 import CustomError from "./utils/customError";
 
 const app = express();
@@ -39,6 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use("/", authRouter);
+app.use("/api/users", userRouter);
 interface ResponseError extends Error {
   status: number;
 }
@@ -51,12 +53,12 @@ app.use(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (err: ResponseError, req: Request, res: Response, next: NextFunction) => {
     if (process.env.NODE_ENV === "production") {
-      res.status(err.status).json({
+      res.status(err.status || 500).json({
         status: "fail",
         message: err.message,
       });
     } else {
-      res.status(err.status).json({
+      res.status(err.status || 500).json({
         status: "fail",
         message: err.message,
         stack: err.stack,
