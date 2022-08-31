@@ -1,6 +1,7 @@
 import request from "supertest";
 
 import app from "../app";
+import Request from "../model/request";
 import User from "../model/user";
 import { connect, close, clear } from "../mongoConfigTesting";
 import { signToken } from "../utils/jwtUtility";
@@ -95,19 +96,46 @@ describe("GET /api/requests/friends", () => {
   });
 });
 
+describe("DELETE /api/requests/:senderID", () => {
+  it("user2 should be able to delete the request sent by user1", (done) => {
+    request(app)
+      .delete(`/api/requests/${user1Id}`)
+      .set("Authorization", `Bearer ${user2Token}`)
+      .expect(200)
+      .end(async (err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.request).toBeNull();
+        const deletedRequest = await Request.findOne({
+          receiver: user2Id,
+          sender: user1Id,
+        });
+        expect(deletedRequest).toBeNull();
+        return done();
+      });
+  });
+});
+
 describe("PATCH /api/requests/:senderID", () => {
   it("user2 should be able to accept user1's request", (done) => {
     request(app)
-      .patch(`/api/requests/${user1Id}`)
-      .set("Authorization", `Bearer ${user2Token}`)
+      .post(`/api/requests/${user2Id}/send`)
+      .set("Authorization", `Bearer ${user1Token}`)
       .expect("Content-Type", /json/)
       .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(res.body.status).toMatch(/success/i);
-        expect(res.body.request).toBeTruthy();
-        expect(res.body.request.status).toMatch(/accepted/i);
-        return done();
+      .end(() => {
+        request(app)
+          .patch(`/api/requests/${user1Id}`)
+          .set("Authorization", `Bearer ${user2Token}`)
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(res.body.status).toMatch(/success/i);
+            expect(res.body.request).toBeTruthy();
+            expect(res.body.request.status).toMatch(/accepted/i);
+            return done();
+          });
       });
   });
 });
