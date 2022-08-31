@@ -42,10 +42,10 @@ afterAll(async () => {
   jest.clearAllMocks();
 });
 
-describe("POST /api/requests/receiver/:receiverID", () => {
-  it("user1 should be able to send a request to user2", (done) => {
+describe("POST /api/requests/:receiverID/send", () => {
+  it("user1 should be able to send a request to user2 and have a status of pending", (done) => {
     request(app)
-      .post(`/api/requests/receiver/${user2Id}`)
+      .post(`/api/requests/${user2Id}/send`)
       .set("Authorization", `Bearer ${user1Token}`)
       .expect("Content-Type", /json/)
       .expect(200)
@@ -91,6 +91,23 @@ describe("GET /api/requests/friends", () => {
         expect(res.body.requests).toBeTruthy();
         expect(res.body.requests).toHaveLength(0);
         return done(err);
+      });
+  });
+});
+
+describe("PATCH /api/requests/:senderID", () => {
+  it("user2 should be able to accept user1's request", (done) => {
+    request(app)
+      .patch(`/api/requests/${user1Id}`)
+      .set("Authorization", `Bearer ${user2Token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.request).toBeTruthy();
+        expect(res.body.request.status).toMatch(/accepted/i);
+        return done();
       });
   });
 });
