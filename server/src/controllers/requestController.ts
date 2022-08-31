@@ -26,3 +26,14 @@ export const createRequest = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { request });
 });
+
+export const updateRequest = catchAsync(async (req, res, next) => {
+  const { id } = req.user as IUser;
+  const request = await Request.findOneAndUpdate(
+    { receiver: id, sender: req.params.senderID },
+    { status: "Accepted" },
+    { new: true }
+  );
+
+  return sendResponse(res, 200, { request });
+});
