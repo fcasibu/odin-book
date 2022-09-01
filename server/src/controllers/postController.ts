@@ -39,3 +39,22 @@ export const getAllPosts = catchAsync(async (req, res) => {
 
   return sendResponse(res, 200, { posts });
 });
+
+export const createPost = catchAsync(async (req, res) => {
+  const { id } = req.user as IUser;
+  const post = await Post.create({
+    ...req.body,
+    author: id,
+  });
+
+  return sendResponse(res, 201, { post });
+});
+
+export const deletePost = catchAsync(async (req, res) => {
+  const { id } = req.user as IUser;
+  await Post.findOneAndDelete({
+    _id: req.params.postId,
+    author: id,
+  });
+  return sendResponse(res, 200, { post: null });
+});
