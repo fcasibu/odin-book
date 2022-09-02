@@ -16,7 +16,8 @@ export const getAllPosts = catchAsync(async (req, res) => {
   })
     .skip(skip)
     .limit(10)
-    .distinct("sender");
+    .distinct("sender")
+    .exec();
 
   const receiver = Request.find({
     $or: [{ sender: id }, { receiver: id }],
@@ -24,7 +25,8 @@ export const getAllPosts = catchAsync(async (req, res) => {
   })
     .skip(skip)
     .limit(10)
-    .distinct("receiver");
+    .distinct("receiver")
+    .exec();
 
   const friends = (await Promise.all([sender, receiver]))
     .flat()
@@ -35,7 +37,8 @@ export const getAllPosts = catchAsync(async (req, res) => {
   })
     .skip(skip)
     .limit(10)
-    .populate("author", "firstName lastName");
+    .populate("author", "firstName lastName")
+    .exec();
 
   return sendResponse(res, 200, { posts });
 });
@@ -53,8 +56,17 @@ export const createPost = catchAsync(async (req, res) => {
 export const deletePost = catchAsync(async (req, res) => {
   const { id } = req.user as IUser;
   await Post.findOneAndDelete({
-    _id: req.params.postId,
+    _id: req.params.postID,
     author: id,
-  });
+  }).exec();
   return sendResponse(res, 200, { post: null });
 });
+
+export const updatePost = catchAsync(async (req, res, next) => {
+  const { id } = req.user as IUser;
+  const post = await Post.findOneAndUpdate({
+    _id: req.params.postID,
+    author: id,
+  }, req.body, { new: true }).exec();
+  return sendResponse(res, 200, { post });
+})
