@@ -46,9 +46,4 @@ export const signUp = catchAsync(async (req, res) => {
   return sendResponse(res, 201, { user, token });
 });
 
-export const verify = [
-  passport.authenticate("jwt", { session: false }),
-  (req: Request, res: Response, next: NextFunction) => {
-    next();
-  },
-];
+export const verify = passport.authenticate("jwt", { session: false });
