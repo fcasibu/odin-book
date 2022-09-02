@@ -5,6 +5,7 @@ import {
   createPost,
   deletePost,
   getAllPosts,
+  getPost,
   updatePost,
 } from "../controllers/postController";
 
@@ -14,6 +15,6 @@ router.use(verify);
 
 router.route("/").get(getAllPosts).post(createPost);
 
-router.route("/:postID").delete(deletePost).patch(updatePost);
+router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
 
 export default router;

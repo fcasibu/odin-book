@@ -43,6 +43,12 @@ export const getAllPosts = catchAsync(async (req, res) => {
   return sendResponse(res, 200, { posts });
 });
 
+export const getPost = catchAsync(async (req, res, next) => {
+  const post = await Post.findById(req.params.postID).exec();
+
+  return sendResponse(res, 200, { post });
+})
+
 export const createPost = catchAsync(async (req, res) => {
   const { id } = req.user as IUser;
   const post = await Post.create({

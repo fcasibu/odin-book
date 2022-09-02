@@ -75,6 +75,23 @@ describe("GET /api/posts", () => {
   });
 });
 
+describe("GET /api/posts/:postID", () => {
+  it("should respond with the post successfuly", (done) => {
+    request(app)
+      .get(`/api/posts/${postID}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.post).toBeTruthy();
+        expect(res.body.post.text).toMatch(/hello world/i);
+        return done(err);
+      });
+  });
+});
+
 describe("PATCH /api/posts/:postID", () => {
   it("current user should be able to edit their post successfully", (done) => {
     request(app)
