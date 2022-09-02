@@ -26,7 +26,7 @@ beforeAll(async () => {
   await connect();
   const testUser = await User.create(user);
   const testPost = await Post.create({ ...post, author: testUser._id });
-  postId = testPost._id.toString();
+  postID = testPost._id.toString();
   id = testUser._id.toString();
   token = signToken(testUser._id);
 });
@@ -68,8 +68,45 @@ describe("GET /api/posts", () => {
         if (err) return done(err);
         expect(res.body.status).toMatch(/success/i);
         expect(res.body.posts).toBeTruthy();
-        expect(res.body.posts).toHaveLength(1);
-        expect(res.body.posts[0].text).toMatch(/test post/i);
+        expect(res.body.posts).toHaveLength(2);
+        expect(res.body.posts[0].text).toMatch(/hello world/i);
+        return done(err);
+      });
+  });
+});
+
+describe("PATCH /api/posts/:postID", () => {
+  it("current user should be able to edit their post successfully", (done) => {
+    request(app)
+      .patch(`/api/posts/${postID}`)
+      .type('form')
+      .send({ text: 'new text' })
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.post).toBeTruthy();
+        expect(res.body.post.text).toMatch(/new text/i);
+        return done(err);
+      });
+  });
+});
+
+describe("DELETE /api/posts/:postID", () => {
+  it("current user should be able to delete their post successfully", (done) => {
+    request(app)
+      .delete(`/api/posts/${postID}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end(async (err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.post).toBeNull();
+        const post = await Post.findById(postID);
+        expect(post).toBeNull();
         return done(err);
       });
   });
