@@ -11,6 +11,7 @@ import User from "./model/user";
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import requestRouter from "./routes/request";
+import postRouter from "./routes/post";
 
 import CustomError from "./utils/customError";
 
@@ -44,6 +45,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/requests", requestRouter);
+app.use("/api/posts", postRouter);
 interface ResponseError extends Error {
   status: number;
 }
