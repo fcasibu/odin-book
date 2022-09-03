@@ -57,7 +57,7 @@ describe("POST /api/requests/:receiverID/send", () => {
         expect(res.body.request.sender).toBe(user1Id);
         expect(res.body.request.receiver).toBe(user2Id);
         expect(res.body.request.status).toMatch(/pending/i);
-        return done(err);
+        return done();
       });
   });
 });
@@ -76,7 +76,7 @@ describe("GET /api/requests/friends", () => {
         expect(res.body.requests).toHaveLength(1);
         expect(res.body.requests[0].sender._id).toBe(user1Id);
         expect(res.body.requests[0].receiver).toBe(user2Id);
-        return done(err);
+        return done();
       });
   });
 
@@ -91,7 +91,7 @@ describe("GET /api/requests/friends", () => {
         expect(res.body.status).toMatch(/success/i);
         expect(res.body.requests).toBeTruthy();
         expect(res.body.requests).toHaveLength(0);
-        return done(err);
+        return done();
       });
   });
 });
