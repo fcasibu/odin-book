@@ -28,3 +28,15 @@ export const createComment = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 201, { comment });
 });
+
+export const createChildComment = catchAsync(async (req, res, next) => {
+  const { id } = req.user as IUser;
+  const comment = await Comment.create({
+    ...req.body,
+    author: id,
+    location: req.params.commentID,
+    model: "Comment",
+  });
+
+  return sendResponse(res, 201, { comment });
+});

@@ -2,6 +2,7 @@ import express from "express";
 
 import { verify } from "../controllers/authController.";
 import {
+  createChildComment,
   createComment,
   getAllComments,
 } from "../controllers/commentController";
@@ -22,5 +23,7 @@ router.route("/").get(getAllPosts).post(createPost);
 router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
 
 router.route("/:postID/comments").get(getAllComments).post(createComment);
+
+router.route("/:postID/comments/:commentID").post(createChildComment);
 
 export default router;
