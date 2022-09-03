@@ -12,6 +12,7 @@ export const getAllComments = catchAsync(async (req, res, next) => {
     .skip(skip)
     .limit(4)
     .sort("-createdAt")
+    .populate("author", "firstName lastName")
     .exec();
 
   return sendResponse(res, 200, { comments });
@@ -24,6 +25,7 @@ export const getAllChildComments = catchAsync(async (req, res, next) => {
     .skip(skip)
     .limit(4)
     .sort("-createdAt")
+    .populate("author", "firstName lastName")
     .exec();
 
   return sendResponse(res, 200, { childComments });
