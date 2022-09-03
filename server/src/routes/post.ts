@@ -6,6 +6,7 @@ import {
   createComment,
   getAllChildComments,
   getAllComments,
+  updateComment,
 } from "../controllers/commentController";
 import {
   createPost,
@@ -25,9 +26,14 @@ router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
 
 router.route("/:postID/comments").get(getAllComments).post(createComment);
 
+router.route("/:postID/comments/:commentID").patch(updateComment);
+
 router
-  .route("/:postID/comments/:commentID")
+  .route("/:postID/comments/:commentID/childComments")
   .get(getAllChildComments)
   .post(createChildComment);
 
+router
+  .route("/:postID/comments/:commentID/childComments/:childCommentID")
+  .patch(updateComment);
 export default router;
