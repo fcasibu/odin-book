@@ -4,6 +4,7 @@ import { verify } from "../controllers/authController.";
 import {
   createChildComment,
   createComment,
+  getAllChildComments,
   getAllComments,
 } from "../controllers/commentController";
 import {
@@ -24,6 +25,9 @@ router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
 
 router.route("/:postID/comments").get(getAllComments).post(createComment);
 
-router.route("/:postID/comments/:commentID").post(createChildComment);
+router
+  .route("/:postID/comments/:commentID")
+  .get(getAllChildComments)
+  .post(createChildComment);
 
 export default router;
