@@ -1,6 +1,7 @@
 import express from "express";
 
 import { verify } from "../controllers/authController.";
+import { getAllComments } from "../controllers/commentController";
 import {
   createPost,
   deletePost,
@@ -16,5 +17,7 @@ router.use(verify);
 router.route("/").get(getAllPosts).post(createPost);
 
 router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
+
+router.route("/:postID/comments").get(getAllComments)
 
 export default router;
