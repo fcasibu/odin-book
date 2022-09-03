@@ -56,7 +56,7 @@ export const createChildComment = catchAsync(async (req, res, next) => {
 });
 
 export const updateComment = catchAsync(async (req, res, next) => {
-  const id = req.params.commentID ?? req.params.childCommentID;
+  const id = req.params.childCommentID ?? req.params.commentID;
   const comment = await Comment.findByIdAndUpdate(
     id,
     { text: req.body.text },
