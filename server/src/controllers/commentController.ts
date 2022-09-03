@@ -21,14 +21,14 @@ export const getAllComments = catchAsync(async (req, res, next) => {
 export const getAllChildComments = catchAsync(async (req, res, next) => {
   const skip = paginate(Number(req.query.page ?? 1));
 
-  const childComments = await Comment.find({ location: req.params.commentID })
+  const comments = await Comment.find({ location: req.params.commentID })
     .skip(skip)
     .limit(4)
     .sort("-createdAt")
     .populate("author", "firstName lastName")
     .exec();
 
-  return sendResponse(res, 200, { childComments });
+  return sendResponse(res, 200, { comments });
 });
 
 export const createComment = catchAsync(async (req, res, next) => {
@@ -45,12 +45,23 @@ export const createComment = catchAsync(async (req, res, next) => {
 
 export const createChildComment = catchAsync(async (req, res, next) => {
   const { id } = req.user as IUser;
-  const childComment = await Comment.create({
+  const comment = await Comment.create({
     ...req.body,
     author: id,
     location: req.params.commentID,
     model: "Comment",
   });
 
-  return sendResponse(res, 201, { childComment });
+  return sendResponse(res, 201, { comment });
+});
+
+export const updateComment = catchAsync(async (req, res, next) => {
+  const id = req.params.commentID ?? req.params.childCommentID;
+  const comment = await Comment.findByIdAndUpdate(
+    id,
+    { text: req.body.text },
+    { new: true }
+  ).exec();
+
+  return sendResponse(res, 200, { comment });
 });
