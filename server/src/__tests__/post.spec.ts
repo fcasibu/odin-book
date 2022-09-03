@@ -23,10 +23,15 @@ const comment = {
   text: "test comment",
 };
 
+const childComment = {
+  text: "test child comment",
+};
+
 let token: string;
 let id: string;
 let postID: string;
 let commentID: string;
+let childCommentID: string;
 
 beforeAll(async () => {
   await connect();
@@ -38,8 +43,15 @@ beforeAll(async () => {
     author: testUser._id,
     model: "Post",
   });
+  const testChildComment = await Comment.create({
+    ...childComment,
+    location: testComment._id,
+    author: testUser._id,
+    model: "Comment",
+  });
   postID = testPost._id.toString();
   commentID = testComment._id.toString();
+  childCommentID = testChildComment._id.toString();
   id = testUser._id.toString();
   token = signToken(testUser._id);
 });
@@ -154,6 +166,8 @@ describe("GET /api/posts/:postID/comments", () => {
         expect(res.body.status).toMatch(/success/i);
         expect(res.body.comments).toBeTruthy();
         expect(res.body.comments).toHaveLength(1);
+        expect(res.body.comments[0].text).toMatch(/test comment/i);
+        expect(res.body.comments[0].author.firstName).toBe(user.firstName);
         return done();
       });
   });
@@ -174,6 +188,45 @@ describe("POST /api/posts/:postID/comments", () => {
         expect(res.body.comment).toBeTruthy();
         expect(res.body.comment.text).toMatch(/another test/i);
         expect(res.body.comment.location).toBe(postID);
+        return done();
+      });
+  });
+});
+
+describe("GET /api/posts/:postID/comments/:commentID", () => {
+  it("should retrieve all the child comments of the commentID", (done) => {
+    request(app)
+      .get(`/api/posts/${postID}/comments/${commentID}`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.childComments).toBeTruthy();
+        expect(res.body.childComments).toHaveLength(1);
+        expect(res.body.childComments[0].text).toMatch(/test child comment/i);
+        expect(res.body.childComments[0].author.firstName).toBe(user.firstName);
+        return done();
+      });
+  });
+});
+
+describe("POST /api/posts/:postID/comments/:commentID", () => {
+  it("should create a new child comment on a comment", (done) => {
+    request(app)
+      .post(`/api/posts/${postID}/comments/${commentID}`)
+      .type("form")
+      .send({ text: "test child comment" })
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(201)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.childComment).toBeTruthy();
+        expect(res.body.childComment.text).toMatch(/test child comment/i);
+        expect(res.body.childComment.location).toBe(commentID);
         return done();
       });
   });
