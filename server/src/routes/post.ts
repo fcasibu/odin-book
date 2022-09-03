@@ -3,6 +3,7 @@ import express from "express";
 import { verify } from "../controllers/authController.";
 import {
   createComment,
+  deleteComment,
   getAllComments,
   updateComment,
 } from "../controllers/commentController";
@@ -24,7 +25,10 @@ router.route("/:postID").get(getPost).delete(deletePost).patch(updatePost);
 
 router.route("/:postID/comments").get(getAllComments).post(createComment);
 
-router.route("/:postID/comments/:commentID").patch(updateComment);
+router
+  .route("/:postID/comments/:commentID")
+  .patch(updateComment)
+  .delete(deleteComment);
 
 router
   .route("/:postID/comments/:commentID/childComments")
@@ -33,5 +37,7 @@ router
 
 router
   .route("/:postID/comments/:commentID/childComments/:childCommentID")
-  .patch(updateComment);
+  .patch(updateComment)
+  .delete(deleteComment);
+
 export default router;

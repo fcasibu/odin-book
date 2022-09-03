@@ -42,3 +42,10 @@ export const updateComment = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { comment });
 });
+
+export const deleteComment = catchAsync(async (req, res, next) => {
+  const id = req.params.childCommentID ?? req.params.commentID;
+  await Comment.findByIdAndDelete(id);
+
+  return sendResponse(res, 200, { comment: null });
+});
