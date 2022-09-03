@@ -1,4 +1,5 @@
 import Comment from "../model/comment";
+import { IUser } from "../model/user";
 
 import catchAsync from "../utils/catchAsync";
 import { paginate } from "../utils/paginate";
@@ -17,8 +18,10 @@ export const getAllComments = catchAsync(async (req, res, next) => {
 });
 
 export const createComment = catchAsync(async (req, res, next) => {
+  const { id } = req.user as IUser;
   const comment = await Comment.create({
     ...req.body,
+    author: id,
     location: req.params.postID,
     model: "Post",
   });
