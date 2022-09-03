@@ -95,7 +95,7 @@ describe("PATCH /api/users/:userID", () => {
         expect(res.body.user.email).not.toBe("new@test.com");
         expect(res.body.user.bannerURL).toBeUndefined();
         expect(res.body.user.avatarURL).toBeUndefined();
-        return done(err);
+        return done();
       });
   });
 });
