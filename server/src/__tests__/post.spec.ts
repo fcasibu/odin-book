@@ -5,6 +5,7 @@ import User from "../model/user";
 import Post from "../model/post";
 import { connect, close, clear } from "../mongoConfigTesting";
 import { signToken } from "../utils/jwtUtility";
+import Comment from "../model/comment";
 
 const user = {
   firstName: "first",
@@ -18,15 +19,27 @@ const post = {
   text: "hello world",
 };
 
+const comment = {
+  text: "test comment",
+};
+
 let token: string;
 let id: string;
 let postID: string;
+let commentID: string;
 
 beforeAll(async () => {
   await connect();
   const testUser = await User.create(user);
   const testPost = await Post.create({ ...post, author: testUser._id });
+  const testComment = await Comment.create({
+    ...comment,
+    location: testPost._id,
+    author: testUser._id,
+    model: "Post",
+  });
   postID = testPost._id.toString();
+  commentID = testComment._id.toString();
   id = testUser._id.toString();
   token = signToken(testUser._id);
 });
@@ -52,7 +65,7 @@ describe("POST /api/posts", () => {
         expect(res.body.post).toBeTruthy();
         expect(res.body.post.text).toMatch(/test post/i);
         expect(res.body.post.author).toBe(id);
-        return done(err);
+        return done();
       });
   });
 });
@@ -70,7 +83,7 @@ describe("GET /api/posts", () => {
         expect(res.body.posts).toBeTruthy();
         expect(res.body.posts).toHaveLength(2);
         expect(res.body.posts[0].text).toMatch(/hello world/i);
-        return done(err);
+        return done();
       });
   });
 });
@@ -87,7 +100,7 @@ describe("GET /api/posts/:postID", () => {
         expect(res.body.status).toMatch(/success/i);
         expect(res.body.post).toBeTruthy();
         expect(res.body.post.text).toMatch(/hello world/i);
-        return done(err);
+        return done();
       });
   });
 });
@@ -96,8 +109,8 @@ describe("PATCH /api/posts/:postID", () => {
   it("current user should be able to edit their post successfully", (done) => {
     request(app)
       .patch(`/api/posts/${postID}`)
-      .type('form')
-      .send({ text: 'new text' })
+      .type("form")
+      .send({ text: "new text" })
       .set("Authorization", `Bearer ${token}`)
       .expect("Content-Type", /json/)
       .expect(200)
@@ -106,7 +119,7 @@ describe("PATCH /api/posts/:postID", () => {
         expect(res.body.status).toMatch(/success/i);
         expect(res.body.post).toBeTruthy();
         expect(res.body.post.text).toMatch(/new text/i);
-        return done(err);
+        return done();
       });
   });
 });
@@ -124,7 +137,44 @@ describe("DELETE /api/posts/:postID", () => {
         expect(res.body.post).toBeNull();
         const post = await Post.findById(postID);
         expect(post).toBeNull();
-        return done(err);
+        return done();
+      });
+  });
+});
+
+describe("GET /api/posts/:postID/comments", () => {
+  it("should retrieve all the comments of the postID", (done) => {
+    request(app)
+      .get(`/api/posts/${postID}/comments`)
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.comments).toBeTruthy();
+        expect(res.body.comments).toHaveLength(1);
+        return done();
+      });
+  });
+});
+
+describe("POST /api/posts/:postID/comments", () => {
+  it("should create a new comment on a post", (done) => {
+    request(app)
+      .post(`/api/posts/${postID}/comments`)
+      .type("form")
+      .send({ text: "another test" })
+      .set("Authorization", `Bearer ${token}`)
+      .expect("Content-Type", /json/)
+      .expect(201)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body.status).toMatch(/success/i);
+        expect(res.body.comment).toBeTruthy();
+        expect(res.body.comment.text).toMatch(/another test/i);
+        expect(res.body.comment.location).toBe(postID);
+        return done();
       });
   });
 });
