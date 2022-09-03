@@ -216,6 +216,24 @@ describe("COMMENTS", () => {
     });
   });
 
+  describe("DELETE /api/posts/:postID/comments/:commentID", () => {
+    it("should delete the comment", (done) => {
+      request(app)
+        .delete(`/api/posts/${postID}/comments/${commentID}`)
+        .set("Authorization", `Bearer ${token}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(async (err, res) => {
+          if (err) return done(err);
+          expect(res.body.status).toMatch(/success/i);
+          expect(res.body.comment).toBeNull();
+          const comment = await Comment.findById(commentID);
+          expect(comment).toBeNull();
+          return done();
+        });
+    });
+  });
+
   describe("GET /api/posts/:postID/comments/:commentID/childComments", () => {
     it("should retrieve all the child comments of the commentID", (done) => {
       request(app)
@@ -273,6 +291,26 @@ describe("COMMENTS", () => {
           expect(res.body.comment).toBeTruthy();
           expect(res.body.comment.text).toMatch(/updated child comment/i);
           expect(res.body.comment.location).toBe(commentID);
+          return done();
+        });
+    });
+  });
+
+  describe("DELETE /api/posts/:postID/comments/:commentID", () => {
+    it("should delete the child comment", (done) => {
+      request(app)
+        .delete(
+          `/api/posts/${postID}/comments/${commentID}/childComments/${childCommentID}`
+        )
+        .set("Authorization", `Bearer ${token}`)
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(async (err, res) => {
+          if (err) return done(err);
+          expect(res.body.status).toMatch(/success/i);
+          expect(res.body.comment).toBeNull();
+          const comment = await Comment.findById(childCommentID);
+          expect(comment).toBeNull();
           return done();
         });
     });
