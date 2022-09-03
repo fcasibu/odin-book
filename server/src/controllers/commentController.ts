@@ -15,3 +15,13 @@ export const getAllComments = catchAsync(async (req, res, next) => {
 
   return sendResponse(res, 200, { comments });
 });
+
+export const createComment = catchAsync(async (req, res, next) => {
+  const comment = await Comment.create({
+    ...req.body,
+    location: req.params.postID,
+    model: "Post",
+  });
+
+  return sendResponse(res, 201, { comment });
+});
