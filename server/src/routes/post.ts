@@ -2,9 +2,7 @@ import express from "express";
 
 import { verify } from "../controllers/authController.";
 import {
-  createChildComment,
   createComment,
-  getAllChildComments,
   getAllComments,
   updateComment,
 } from "../controllers/commentController";
@@ -30,8 +28,8 @@ router.route("/:postID/comments/:commentID").patch(updateComment);
 
 router
   .route("/:postID/comments/:commentID/childComments")
-  .get(getAllChildComments)
-  .post(createChildComment);
+  .get(getAllComments)
+  .post(createComment);
 
 router
   .route("/:postID/comments/:commentID/childComments/:childCommentID")
