@@ -193,20 +193,21 @@ describe("POST /api/posts/:postID/comments", () => {
   });
 });
 
-describe("GET /api/posts/:postID/comments/:commentID", () => {
+describe("GET /api/posts/:postID/comments/:commentID/childComments", () => {
   it("should retrieve all the child comments of the commentID", (done) => {
     request(app)
-      .get(`/api/posts/${postID}/comments/${commentID}`)
+      .get(`/api/posts/${postID}/comments/${commentID}/childComments`)
       .set("Authorization", `Bearer ${token}`)
       .expect("Content-Type", /json/)
       .expect(200)
       .end((err, res) => {
         if (err) return done(err);
         expect(res.body.status).toMatch(/success/i);
-        expect(res.body.childComments).toBeTruthy();
-        expect(res.body.childComments).toHaveLength(1);
-        expect(res.body.childComments[0].text).toMatch(/test child comment/i);
-        expect(res.body.childComments[0].author.firstName).toBe(user.firstName);
+        expect(res.body.comments).toBeTruthy();
+        expect(res.body.comments).toHaveLength(1);
+        expect(res.body.comments[0].text).toMatch(/test child comment/i);
+        console.log(res.body.comments[0].author);
+        expect(res.body.comments[0].author.firstName).toBe(user.firstName);
         return done();
       });
   });
@@ -215,7 +216,7 @@ describe("GET /api/posts/:postID/comments/:commentID", () => {
 describe("POST /api/posts/:postID/comments/:commentID", () => {
   it("should create a new child comment on a comment", (done) => {
     request(app)
-      .post(`/api/posts/${postID}/comments/${commentID}`)
+      .post(`/api/posts/${postID}/comments/${commentID}/childComments`)
       .type("form")
       .send({ text: "test child comment" })
       .set("Authorization", `Bearer ${token}`)
@@ -224,10 +225,11 @@ describe("POST /api/posts/:postID/comments/:commentID", () => {
       .end((err, res) => {
         if (err) return done(err);
         expect(res.body.status).toMatch(/success/i);
-        expect(res.body.childComment).toBeTruthy();
-        expect(res.body.childComment.text).toMatch(/test child comment/i);
-        expect(res.body.childComment.location).toBe(commentID);
+        expect(res.body.comment).toBeTruthy();
+        expect(res.body.comment.text).toMatch(/test child comment/i);
+        expect(res.body.comment.location).toBe(commentID);
         return done();
       });
   });
 });
+
