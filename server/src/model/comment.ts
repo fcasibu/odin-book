@@ -4,7 +4,7 @@ interface IComment extends mongoose.Document {
   location: mongoose.Schema.Types.ObjectId;
   model: 'Post' | 'Comment';
   author: mongoose.Schema.Types.ObjectId;
-  text: String;
+  text: string;
   comments?: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;
 }
@@ -33,10 +33,6 @@ const CommentSchema = new Schema<IComment>({
     maxLength: 1000,
     required: true
   },
-  comments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comment'
-  }],
   createdAt: {
     type: Date,
     default: Date.now
