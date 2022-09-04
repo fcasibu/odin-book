@@ -1,5 +1,6 @@
 import express from "express";
 
+import { verify } from "../controllers/authController";
 import {
   createLike,
   deleteLike,
@@ -7,6 +8,8 @@ import {
 } from "../controllers/likeController";
 
 const router = express.Router();
+
+router.use(verify);
 
 router.route("/:locationID").get(getAllLikes).post(createLike);
 

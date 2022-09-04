@@ -1,6 +1,6 @@
 import express from "express";
 
-import { verify } from "../controllers/authController.";
+import { verify } from "../controllers/authController";
 import {
   deleteUser,
   deleteUserFriend,
