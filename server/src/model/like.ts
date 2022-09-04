@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface ILike extends mongoose.Document {
-  currentUser: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId;
   model: "Post" | "Comment";
   location: mongoose.Schema.Types.ObjectId;
 }
@@ -9,7 +9,7 @@ export interface ILike extends mongoose.Document {
 const Schema = mongoose.Schema;
 
 const LikeSchema = new Schema<ILike>({
-  currentUser: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
