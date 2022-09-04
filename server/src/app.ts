@@ -12,6 +12,7 @@ import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import requestRouter from "./routes/request";
 import postRouter from "./routes/post";
+import likeRouter from "./routes/like";
 
 import CustomError from "./utils/customError";
 
@@ -46,6 +47,8 @@ app.use("/", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/requests", requestRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/likes", likeRouter);
+
 interface ResponseError extends Error {
   status: number;
 }
