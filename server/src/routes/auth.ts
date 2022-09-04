@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 
-import { signIn, signUp, verify } from "../controllers/authController.";
+import { signIn, signUp, verify } from "../controllers/authController";
 import isValid from "../middlewares/isValid";
 import { validateSignIn, validateSignUp } from "../utils/validators";
 

@@ -11,7 +11,7 @@ export const getAllComments = catchAsync(async (req, res, next) => {
 
   const comments = await Comment.find({ location: id })
     .skip(skip)
-    .limit(4)
+           .limit(4)
     .sort("-createdAt")
     .populate("author", "firstName lastName")
     .exec();
