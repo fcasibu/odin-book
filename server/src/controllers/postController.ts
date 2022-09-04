@@ -47,7 +47,7 @@ export const getPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.postID).exec();
 
   return sendResponse(res, 200, { post });
-})
+});
 
 export const createPost = catchAsync(async (req, res) => {
   const { id } = req.user as IUser;
@@ -70,9 +70,13 @@ export const deletePost = catchAsync(async (req, res) => {
 
 export const updatePost = catchAsync(async (req, res, next) => {
   const { id } = req.user as IUser;
-  const post = await Post.findOneAndUpdate({
-    _id: req.params.postID,
-    author: id,
-  }, req.body, { new: true }).exec();
+  const post = await Post.findOneAndUpdate(
+    {
+      _id: req.params.postID,
+      author: id,
+    },
+    req.body,
+    { new: true }
+  ).exec();
   return sendResponse(res, 200, { post });
-})
+});
