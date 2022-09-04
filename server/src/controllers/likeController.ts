@@ -27,9 +27,18 @@ export const createLike = catchAsync(async (req, res, next) => {
   }
   const like = await Like.create({
     user: id,
-    location: req.params.postID,
+    location: req.params.locationID,
     model: req.query.type,
   });
 
   return sendResponse(res, 201, { like });
+});
+
+export const deleteLike = catchAsync(async (req, res, next) => {
+  await Like.findOneAndDelete({
+    location: req.params.locationID,
+    _id: req.params.likeID,
+  }).exec();
+
+  return sendResponse(res, 200, { like: null });
 });
