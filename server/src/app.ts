@@ -14,6 +14,7 @@ import requestRouter from "./routes/request";
 import postRouter from "./routes/post";
 import likeRouter from "./routes/like";
 import categoryRouter from "./routes/category";
+import auctionRouter from "./routes/auction";
 
 import CustomError from "./utils/customError";
 
@@ -50,6 +51,7 @@ app.use("/api/requests", requestRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/likes", likeRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/auctions", auctionRouter);
 
 interface ResponseError extends Error {
     status: number;
