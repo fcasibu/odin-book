@@ -2,10 +2,10 @@ import express from "express";
 
 import { verify } from "../controllers/authController";
 import {
-  createRequest,
-  deleteRequest,
-  getAllFriendRequest,
-  updateRequest,
+    createRequest,
+    deleteRequest,
+    getAllFriendRequest,
+    updateRequest,
 } from "../controllers/requestController";
 
 const router = express.Router();

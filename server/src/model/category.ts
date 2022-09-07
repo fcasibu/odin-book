@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 export interface ICategory extends mongoose.Document {
-  title: string;
+    title: string;
 }
 
 const Schema = mongoose.Schema;
 
 const CategorySchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-  },
+    title: {
+        type: String,
+        required: true,
+    },
 });
 
 const Category = mongoose.model("Category", CategorySchema);

@@ -2,9 +2,9 @@ import express from "express";
 
 import { verify } from "../controllers/authController";
 import {
-  createLike,
-  deleteLike,
-  getAllLikes,
+    createLike,
+    deleteLike,
+    getAllLikes,
 } from "../controllers/likeController";
 
 const router = express.Router();
