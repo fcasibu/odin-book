@@ -275,7 +275,6 @@ describe("COMMENTS", () => {
 
     describe("PATCH /api/posts/:postID/comments/:commentID/childComments/:childCommentID", () => {
         it("should update the childComment", (done) => {
-            console.log(childCommentID);
             request(app)
                 .patch(
                     `/api/posts/${postID}/comments/${commentID}/childComments/${childCommentID}`
