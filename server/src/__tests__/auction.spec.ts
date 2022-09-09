@@ -19,7 +19,7 @@ const auction = {
     description: 'Test description',
     startingBid: 500,
     photoURL: '',
-    createdAt: Date.now(),
+    startDate: Date.now(),
     endDate: new Date('2050').getTime()
 };
 
@@ -52,12 +52,14 @@ describe("POST /api/auctions", () => {
             .expect(201)
             .end((err, res) => {
                 if (err) return done(err);
+                request(app)
                 expect(res.body.status).toMatch(/success/i);
+                auctionID = res.body.item.auction._id.toString();
                 expect(res.body.item).toBeTruthy();
                 expect(res.body.item.title).toBe(auction.title);
                 expect(res.body.item.auction.description).toBe(auction.description);
                 expect(res.body.item.auction.startingBid).toBe(auction.startingBid);
-                expect(res.body.item.auction.createdAt).toBe(new Date(auction.createdAt).toISOString());
+                expect(res.body.item.auction.startDate).toBe(new Date(auction.startDate).toISOString());
                 expect(res.body.item.auction.endDate).toBe(new Date(auction.endDate).toISOString());
                 return done();
             })
@@ -76,6 +78,25 @@ describe("GET /api/auctions/", () => {
                 expect(res.body.status).toMatch(/success/i)
                 expect(res.body.auctions).toBeTruthy();
                 expect(res.body.auctions).toHaveLength(1);
+                return done();
+            })
+    })
+})
+
+describe("GET /api/auctions/auctionID", () => {
+    it("should retrieve all the active auctions", done => {
+        request(app)
+            .get(`/api/auctions/${auctionID}`)
+            .set("Authorization", `Bearer ${token}`)
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res.body.status).toMatch(/success/i)
+                expect(res.body.auction).toBeTruthy();
+                expect(res.body.auction.item).toBeTruthy();
+                expect(res.body.auction.description).toBe(auction.description);
+                expect(res.body.auction.item.title).toBe(auction.title);
                 return done();
             })
     })
