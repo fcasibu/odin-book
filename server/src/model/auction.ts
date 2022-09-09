@@ -6,7 +6,7 @@ export interface IAuction extends mongoose.Document {
     description: string;
     startingBid: number;
     active: boolean;
-    createdAt: Date;
+    startDate: Date;
     endDate: Date;
 }
 
@@ -51,7 +51,7 @@ const AuctionSchema = new Schema<IAuction>({
         type: Boolean,
         default: true,
     },
-    createdAt: {
+    startDate: {
         type: Date,
         required: true,
     },
@@ -59,7 +59,9 @@ const AuctionSchema = new Schema<IAuction>({
         type: Date,
         required: true,
     },
-});
+},
+    { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 const AuctionBidderSchema = new Schema<IAuctionBidder>({
     auction: {
@@ -80,7 +82,9 @@ const AuctionBidderSchema = new Schema<IAuctionBidder>({
         type: Date,
         default: Date.now,
     },
-});
+},
+    { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
 
 const AuctionItemSchema = new Schema<IAuctionItem>({
     title: {
@@ -101,7 +105,16 @@ const AuctionItemSchema = new Schema<IAuctionItem>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
     },
-});
+},
+    { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+);
+
+AuctionSchema.virtual('item', {
+    ref: 'AuctionItem',
+    localField: '_id',
+    foreignField: 'auction',
+    justOne: true
+})
 
 export const Auction = mongoose.model("Auction", AuctionSchema);
 export const AuctionBidder = mongoose.model(
