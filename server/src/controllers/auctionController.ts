@@ -4,6 +4,7 @@ import { IUser } from "../model/user";
 import catchAsync from "../utils/catchAsync";
 import sendResponse from "../utils/sendResponse";
 
+// TODO: Add limit/skip on all other GET all requests
 export const getAllAuctions = catchAsync(async (req, res, next) => {
     const auctions = await Auction.find({ active: { $ne: false } })
         .populate({ path: "item" })
