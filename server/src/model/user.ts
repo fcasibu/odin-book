@@ -63,7 +63,8 @@ const UserSchema = new Schema<IUser>({
     },
 });
 
-UserSchema.pre(/^(findOneAndUpdate|save)/i, async function(next) {
+UserSchema.pre(/^(findOneAndUpdate|save)/i, { document: true }, async function(next) {
+    if (!this.isModified('password')) return next();
     this.password = await bcrypt.hash(this.password, 10);
 
     this.passwordConfirm = undefined;
