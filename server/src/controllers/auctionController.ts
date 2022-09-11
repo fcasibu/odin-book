@@ -1,7 +1,8 @@
-import { Auction, AuctionItem } from "../model/auction";
-import { IUser } from "../model/user";
+import { Auction, AuctionBidder, AuctionItem } from "../model/auction";
+import User, { IUser } from "../model/user";
 
 import catchAsync from "../utils/catchAsync";
+import CustomError from "../utils/customError";
 import sendResponse from "../utils/sendResponse";
 
 // TODO: Add limit/skip on all other GET all requests
@@ -14,9 +15,17 @@ export const getAllAuctions = catchAsync(async (req, res, next) => {
 });
 
 export const getAuction = catchAsync(async (req, res, next) => {
-    const auction = await Auction.findById(req.params.auctionID).populate({ path: "item" }).exec();
+    const a = Auction.findById(req.params.auctionID).populate({ path: "item" }).exec();
+    const b = AuctionBidder.find(
+        {
+            auction: req.params.auctionID,
+        },
+        "-auction"
+    ).populate("user", "firstName lastName");
 
-    return sendResponse(res, 200, { auction });
+    const [auction, bidders] = await Promise.all([a, b]);
+
+    return sendResponse(res, 200, { auction, bidders });
 });
 
 export const createAuction = catchAsync(async (req, res, next) => {
@@ -76,4 +85,24 @@ export const deleteAuction = catchAsync(async (req, res, next) => {
     );
     // TODO: Change all DELETE request to respond with a message instead
     return sendResponse(res, 200, { message: "Successfully deleted the auction" });
+});
+
+export const bid = catchAsync(async (req, res, next) => {
+    const { id, odinTokens } = req.user as IUser;
+
+    if (req.body.odinTokens > odinTokens) {
+        return next(new CustomError("Not enough odin tokens", 400));
+    }
+    await User.findOneAndUpdate(
+        { _id: id },
+        { odinTokens: odinTokens - Number(req.body.odinTokens) }
+    );
+
+    const bid = await AuctionBidder.create({
+        auction: req.params.auctionID,
+        user: id,
+        bid: Number(req.body.odinTokens),
+    });
+
+    return sendResponse(res, 201, { bid });
 });

@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+    bid,
     createAuction,
     deleteAuction,
     getAllAuctions,
@@ -16,5 +17,7 @@ router.use(verify);
 router.route("/").get(getAllAuctions).post(createAuction);
 
 router.route("/:auctionID").get(getAuction).patch(updateAuction).delete(deleteAuction);
+
+router.route("/:auctionID/bid").post(bid);
 
 export default router;
