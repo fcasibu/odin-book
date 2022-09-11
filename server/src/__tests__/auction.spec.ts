@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import app from "../app";
-import { Auction, AuctionItem } from "../model/auction";
+import { Auction, AuctionBidder, AuctionItem } from "../model/auction";
 import Category from "../model/category";
 import User from "../model/user";
 import { connect, close, clear } from "../mongoConfigTesting";
@@ -27,6 +27,7 @@ const auction = {
 let token: string;
 let auctionID: string;
 let categoryID: string;
+let userID: string;
 
 beforeAll(async () => {
     await connect();
@@ -45,8 +46,14 @@ beforeAll(async () => {
         photoURL: auction.photoURL,
         auction: testAuction._id.toString(),
     });
+    await AuctionBidder.create({
+        auction: testAuction._id.toString(),
+        user: testUser._id.toString(),
+        bid: 200,
+    });
     auctionID = testAuction._id.toString();
     categoryID = testCategory._id.toString();
+    userID = testUser._id.toString();
     token = signToken(testUser._id);
 });
 
@@ -84,7 +91,6 @@ describe("POST /api/auctions", () => {
             .expect(201)
             .end((err, res) => {
                 if (err) return done(err);
-                request(app);
                 expect(res.body.status).toMatch(/success/i);
                 expect(res.body.item).toBeTruthy();
                 expect(res.body.item.title).toBe(auction.title);
@@ -111,10 +117,12 @@ describe("GET /api/auctions/:auctionID", () => {
                 if (err) return done(err);
                 expect(res.body.status).toMatch(/success/i);
                 expect(res.body.auction).toBeTruthy();
+                expect(res.body.bidders).toBeTruthy();
                 expect(res.body.auction.active).toBeTruthy();
                 expect(res.body.auction.description).toBe(auction.description);
                 expect(res.body.auction.item).toBeTruthy();
                 expect(res.body.auction.item.title).toBe(auction.title);
+                expect(res.body.bidders).toHaveLength(1);
                 return done();
             });
     });
@@ -153,6 +161,42 @@ describe("DELETE /api/auctions/:auctionID", () => {
                 expect(res.body.message).toMatch(/successfully deleted the auction/i);
                 const auction = await Auction.findById(auctionID);
                 expect(auction?.active).toBeFalsy();
+                return done();
+            });
+    });
+});
+
+describe("POST /api/auctions/:auctionID/bid", () => {
+    it("user should not be able to bid if they don't have enough odin tokens", (done) => {
+        request(app)
+            .post(`/api/auctions/${auctionID}/bid`)
+            .type("form")
+            .send({ odinTokens: 501 })
+            .set("Authorization", `Bearer ${token}`)
+            .expect("Content-Type", /json/)
+            .expect(400)
+            .end((err, res) => {
+                if (err) return done(err);
+                expect(res.body.status).toMatch(/fail/i);
+                expect(res.body.message).toMatch(/not enough odin tokens/i);
+                return done();
+            });
+    });
+
+    it("user should be able to bid on the auction and reduce the user's token", (done) => {
+        request(app)
+            .post(`/api/auctions/${auctionID}/bid`)
+            .type("form")
+            .send({ odinTokens: 400 })
+            .set("Authorization", `Bearer ${token}`)
+            .expect("Content-Type", /json/)
+            .expect(201)
+            .end(async (err, res) => {
+                if (err) return done(err);
+                expect(res.body.status).toMatch(/success/i);
+                expect(res.body.bid).toBeTruthy();
+                const user = await User.findById(userID);
+                expect(user?.odinTokens).toBe(100);
                 return done();
             });
     });
