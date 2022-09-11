@@ -1,14 +1,20 @@
-import express from 'express';
+import express from "express";
 
-import { createAuction, getAllAuctions, getAuction } from '../controllers/auctionController';
-import { verify } from '../controllers/authController';
+import {
+    createAuction,
+    deleteAuction,
+    getAllAuctions,
+    getAuction,
+    updateAuction,
+} from "../controllers/auctionController";
+import { verify } from "../controllers/authController";
 
 const router = express.Router();
 
 router.use(verify);
 
-router.route('/').get(getAllAuctions).post(createAuction);
+router.route("/").get(getAllAuctions).post(createAuction);
 
-router.route('/:auctionID').get(getAuction);
+router.route("/:auctionID").get(getAuction).patch(updateAuction).delete(deleteAuction);
 
 export default router;
