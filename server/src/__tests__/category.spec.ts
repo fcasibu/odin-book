@@ -32,7 +32,6 @@ beforeAll(async () => {
 afterAll(async () => {
     await clear();
     await close();
-    jest.clearAllMocks();
 });
 
 describe("GET /api/categories", () => {

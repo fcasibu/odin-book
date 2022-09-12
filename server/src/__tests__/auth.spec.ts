@@ -27,10 +27,13 @@ beforeAll(async () => {
     await User.create(user);
 });
 
+afterEach(() => {
+    jest.fn().mockReset();
+});
+
 afterAll(async () => {
     await clear();
     await close();
-    jest.clearAllMocks();
 });
 
 let token: string;
@@ -89,6 +92,7 @@ describe("POST /api/signIn", () => {
                 if (err) return done(err);
                 expect(res.body.status).toMatch(/fail/i);
                 expect(res.body.message).toMatch(/user does not exist/i);
+                expect(validateSignIn).toBeCalledTimes(1);
                 return done();
             });
     });
@@ -102,9 +106,8 @@ describe("POST /api/signIn", () => {
             .end((err, res) => {
                 if (err) return done(err);
                 expect(res.body.status).toMatch(/fail/i);
-                expect(res.body.message).toMatch(
-                    /you have entered an invalid password/i
-                );
+                expect(res.body.message).toMatch(/you have entered an invalid password/i);
+                expect(validateSignIn).toBeCalledTimes(1);
                 return done();
             });
     });

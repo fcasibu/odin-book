@@ -40,7 +40,6 @@ beforeAll(async () => {
 afterAll(async () => {
     await clear();
     await close();
-    jest.clearAllMocks();
 });
 
 describe("POST /api/requests/:receiverID/send", () => {
