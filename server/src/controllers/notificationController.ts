@@ -31,7 +31,7 @@ export const notifyFromAuction = catchAsync(async (req, res, next) => {
     for (let i = 0; i < auctionBidders.length; ++i) {
         await Notification.create({
             from: req.params.auctionID,
-            to: auctionBidders[i]._id,
+            to: auctionBidders[i].user,
         });
     }
 
