@@ -1,8 +1,11 @@
-import express from 'express';
-import { getAllNotifications } from '../controllers/notificationController';
+import express from "express";
+import { verify } from "../controllers/authController";
+import { getAllNotifications } from "../controllers/notificationController";
 
 const router = express.Router();
 
-router.route('/').get(getAllNotifications);
+router.use(verify);
+
+router.route("/").get(getAllNotifications);
 
 export default router;
