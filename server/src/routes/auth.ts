@@ -11,10 +11,10 @@ router.route("/api/signIn").post(validateSignIn(), isValid, signIn);
 router.route("/api/signUp").post(validateSignUp(), isValid, signUp);
 
 router.route("/api/verify").get(verify, (req: Request, res: Response) => {
-  return res.status(200).json({
-    status: "success",
-    user: req.user,
-  });
+    return res.status(200).json({
+        status: "success",
+        user: req.user,
+    });
 });
 
 export default router;
