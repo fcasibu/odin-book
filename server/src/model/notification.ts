@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 export interface INotification extends mongoose.Document {
     from: mongoose.Schema.Types.ObjectId;
     to: mongoose.Schema.Types.ObjectId;
-    title: string;
     model: "Request" | "Auction";
     type: mongoose.Schema.Types.ObjectId;
     createdAt: Date;
@@ -20,11 +19,6 @@ const NotificationSchema = new Schema<INotification>({
     to: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true,
-    },
-    title: {
-        type: String,
-        maxLength: 20,
         required: true,
     },
     type: {
