@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export interface INotification extends mongoose.Document {
     from: mongoose.Schema.Types.ObjectId;
     to: mongoose.Schema.Types.ObjectId;
-    model: "Request" | "Auction";
+    model: "User" | "Auction";
     type: mongoose.Schema.Types.ObjectId;
     createdAt: Date;
 }
@@ -28,7 +28,7 @@ const NotificationSchema = new Schema<INotification>({
     },
     model: {
         type: String,
-        enum: ["Request", "Auction"],
+        enum: ["User", "Auction"],
         required: true,
     },
     createdAt: {
