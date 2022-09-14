@@ -19,7 +19,7 @@ export const notifyFromUser = catchAsync(async (req, res, next) => {
     await Notification.create({
         from: id,
         to: req.params.userID,
-        model: "User"
+        model: "User",
     });
 
     return sendResponse(res, 201, null);
@@ -33,7 +33,7 @@ export const notifyFromAuction = catchAsync(async (req, res, next) => {
         await Notification.create({
             from: req.params.auctionID,
             to: auctionBidders[i].user,
-            model: "Auction"
+            model: "Auction",
         });
     }
 
