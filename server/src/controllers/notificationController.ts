@@ -37,3 +37,17 @@ export const notifyFromAuction = catchAsync(async (req, res, next) => {
 
     return sendResponse(res, 201, null);
 });
+
+export const deleteAllNotification = catchAsync(async (req, res, next) => {
+    const { id } = req.user as IUser;
+    await Notification.deleteMany({ to: id });
+
+    return sendResponse(res, 200, { message: "Successfully deleted all notifications" });
+});
+
+export const deleteNotification = catchAsync(async (req, res, next) => {
+    const { id } = req.user as IUser;
+    await Notification.deleteOne({ _id: req.params.notificationID, to: id });
+
+    return sendResponse(res, 200, { message: "Successfully deleted the notification" });
+});
