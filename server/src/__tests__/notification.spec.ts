@@ -44,10 +44,8 @@ const auction = {
 let tokenOfUser1: string;
 let tokenOfUser2: string;
 let auctionID: string;
-let categoryID: string;
 let user1ID: string;
 let user2ID: string;
-let user3ID: string;
 let notificationID: string;
 
 beforeAll(async () => {
@@ -73,10 +71,8 @@ beforeAll(async () => {
     const [a, n] = await Promise.all([testAuction, testNotification]);
 
     auctionID = a._id.toString();
-    categoryID = c._id.toString();
     user1ID = u1._id.toString();
     user2ID = u2._id.toString();
-    user3ID = u3._id.toString();
     notificationID = n._id.toString();
     tokenOfUser1 = signToken(u1._id);
     tokenOfUser2 = signToken(u2._id);
@@ -89,7 +85,7 @@ afterAll(async () => {
 
 // TODO: Tests for socket
 describe("GET /api/notifications", () => {
-    it("should retrieve all the notifications of the current user", (done) => {
+    it("should retrieve all the notifications of the user1", (done) => {
         request(app)
             .get("/api/notifications")
             .set("Authorization", `Bearer ${tokenOfUser1}`)
@@ -130,21 +126,58 @@ describe("POST /api/notifications/auctions/:auctionID", () => {
             user: user1ID,
             bid: 1,
         }).then(() => {
+            request(app)
+                .post(`/api/notifications/auctions/${auctionID}`)
+                .set("Authorization", `Bearer ${tokenOfUser1}`)
+                .expect("Content-Type", /json/)
+                .expect(201)
+                .end(async (err, res) => {
+                    if (err) return done(err);
+                    expect(res.body.status).toMatch(/success/i);
+                    const notification = await Notification.findOne({
+                        from: auctionID,
+                        to: user1ID,
+                    });
+                    expect(notification?.from.toString()).toMatch(auctionID);
+                    expect(notification?.to.toString()).toMatch(user1ID);
+                    return done();
+                });
+        });
+    });
+});
+
+describe("DELETE /api/notifications/:notificationID", () => {
+    it("should delete the notification of user1", (done) => {
         request(app)
-            .post(`/api/notifications/auctions/${auctionID}`)
+            .delete(`/api/notifications/${notificationID}`)
             .set("Authorization", `Bearer ${tokenOfUser1}`)
             .expect("Content-Type", /json/)
-            .expect(201)
+            .expect(200)
             .end(async (err, res) => {
                 if (err) return done(err);
                 expect(res.body.status).toMatch(/success/i);
-                const notification = await Notification.findOne({ from: auctionID, to: user1ID });
-                expect(notification?.from.toString()).toMatch(auctionID);
-                expect(notification?.to.toString()).toMatch(user1ID);
+                expect(res.body.message).toMatch(/successfully deleted the notification/i)
+                const notification = await Notification.findById(notificationID).exec();
+                expect(notification).toBeNull();
                 return done();
             });
+    });
+});
 
-            })
-
+describe("DELETE /api/notifications/", () => {
+    it("should delete all notifications of user1", (done) => {
+        request(app)
+            .delete(`/api/notifications/`)
+            .set("Authorization", `Bearer ${tokenOfUser1}`)
+            .expect("Content-Type", /json/)
+            .expect(200)
+            .end(async (err, res) => {
+                if (err) return done(err);
+                expect(res.body.status).toMatch(/success/i);
+                expect(res.body.message).toMatch(/successfully deleted all notification/i)
+                const notifications = await Notification.find({ to: user1ID }).exec();
+                expect(notifications).toHaveLength(0);
+                return done();
+            });
     });
 });
