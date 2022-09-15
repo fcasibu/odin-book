@@ -19,6 +19,7 @@ export const notifyFromUser = catchAsync(async (req, res, next) => {
     await Notification.create({
         from: id,
         to: req.params.userID,
+        model: "User",
     });
 
     return sendResponse(res, 201, null);
@@ -31,9 +32,24 @@ export const notifyFromAuction = catchAsync(async (req, res, next) => {
     for (let i = 0; i < auctionBidders.length; ++i) {
         await Notification.create({
             from: req.params.auctionID,
-            to: auctionBidders[i]._id,
+            to: auctionBidders[i].user,
+            model: "Auction",
         });
     }
 
     return sendResponse(res, 201, null);
+});
+
+export const deleteAllNotification = catchAsync(async (req, res, next) => {
+    const { id } = req.user as IUser;
+    await Notification.deleteMany({ to: id });
+
+    return sendResponse(res, 200, { message: "Successfully deleted all notifications" });
+});
+
+export const deleteNotification = catchAsync(async (req, res, next) => {
+    const { id } = req.user as IUser;
+    await Notification.deleteOne({ _id: req.params.notificationID, to: id });
+
+    return sendResponse(res, 200, { message: "Successfully deleted the notification" });
 });

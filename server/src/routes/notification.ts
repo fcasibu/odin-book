@@ -1,6 +1,8 @@
 import express from "express";
 import { verify } from "../controllers/authController";
 import {
+    deleteAllNotification,
+    deleteNotification,
     getAllNotifications,
     notifyFromAuction,
     notifyFromUser,
@@ -10,7 +12,9 @@ const router = express.Router();
 
 router.use(verify);
 
-router.route("/").get(getAllNotifications);
+router.route("/").get(getAllNotifications).delete(deleteAllNotification);
+
+router.route("/:notificationID").delete(deleteNotification);
 
 router.route("/users/:userID").post(notifyFromUser);
 

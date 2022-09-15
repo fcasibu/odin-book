@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 export interface INotification extends mongoose.Document {
     from: mongoose.Schema.Types.ObjectId;
     to: mongoose.Schema.Types.ObjectId;
-    model: "Request" | "Auction";
-    type: mongoose.Schema.Types.ObjectId;
+    model: "User" | "Auction";
+    // type: mongoose.Schema.Types.ObjectId; // X
     createdAt: Date;
 }
 
@@ -21,14 +21,14 @@ const NotificationSchema = new Schema<INotification>({
         ref: "User",
         required: true,
     },
-    type: {
+    /* type: {
         type: mongoose.Schema.Types.ObjectId,
         refPath: "model",
         required: true,
-    },
+    }, */
     model: {
         type: String,
-        enum: ["Request", "Auction"],
+        enum: ["User", "Auction"],
         required: true,
     },
     createdAt: {
