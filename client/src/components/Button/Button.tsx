@@ -31,13 +31,15 @@ type Props = {
     variant?: Variant;
     text?: TextColor;
     onClick?: (event: React.MouseEvent) => void;
+    type?: "button" | "submit" | "reset";
 };
 
-const Button = ({ children, size = "md", variant = "default", text = "white", onClick }: Props) => {
+const Button = ({ children, size = "md", variant = "default", text = "white", type = "button", onClick }: Props) => {
     return (
         <button
             className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:scale-[.98] active:scale-[.95] transition-all ease-linear`}
             onClick={onClick}
+            type={type}
         >
             {" "}
             {children}
