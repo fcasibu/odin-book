@@ -1,30 +1,43 @@
 import * as React from "react";
 
 const padding = {
-    sm: "px-2 py-1",
+    none: "p-0",
+    sm: "px-3 py-1",
     md: "px-4 py-2",
-    lg: "px-6 py-4",
+    lg: "px-8 py-4",
 };
 
 const colors = {
-    success: "bg-green-500",
     default: "bg-sky-500",
+    success: "bg-green-500",
+    danger: "bg-red-500",
+    none: "bg-none",
 };
 
-type Size = "sm" | "md" | "lg";
+const textColors = {
+    default: "text-sky-700",
+    white: "text-white",
+    danger: "text-red-700",
+    success: "text-green-700",
+};
 
-type Variant = "success" | "default";
+type Size = keyof typeof padding;
+type Variant = keyof typeof colors;
+type TextColor = keyof typeof textColors;
 
 type Props = {
     children: React.ReactNode;
-    size: Size;
-    variant: Variant;
+    size?: Size;
+    variant?: Variant;
+    text?: TextColor;
+    onClick?: (event: React.MouseEvent) => void;
 };
 
-const Button = ({ children, size, variant }: Props) => {
+const Button = ({ children, size = "md", variant = "default", text = "white", onClick }: Props) => {
     return (
         <button
-            className={`${colors[variant]} text-white font-bold rounded-md ${padding[size]} hover:scale-95 active:scale-90 transition-all ease-linear`}
+            className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:scale-[.98] active:scale-[.95] transition-all ease-linear`}
+            onClick={onClick}
         >
             {" "}
             {children}
