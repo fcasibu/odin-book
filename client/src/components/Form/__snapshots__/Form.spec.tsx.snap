@@ -21,7 +21,7 @@ exports[`Form should render the form and match the snapshot 1`] = `
       />
     </label>
     <button
-      class="bg-sky-500 text-white font-bold rounded-md px-4 py-2 hover:scale-[.98] active:scale-[.95] transition-all ease-linear"
+      class="bg-sky-500 text-white font-bold rounded-md px-4 py-2 hover:opacity-80 active:opacity-100 transition-all ease-linear self-start w-full"
       type="submit"
     >
        
