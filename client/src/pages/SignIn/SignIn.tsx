@@ -28,7 +28,7 @@ export const SignUp = () => {
                     <Button variant="success">Sign Up</Button>
                 </Form>
             </Card>
-            <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-screen w-screen"></div>
+            <div className="fixed inset-0 bg-white bg-opacity-80 overflow-y-auto h-screen w-screen"></div>
         </>
     );
 };
