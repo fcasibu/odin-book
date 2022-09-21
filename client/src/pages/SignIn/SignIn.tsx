@@ -6,7 +6,7 @@ import Form, { Input } from "../../components/Form";
 export const SignUp = () => {
     return (
         <>
-            <Card className="h-fit md:w-[500px] relative z-10">
+            <Card className="h-fit md:w-[500px] fixed z-10">
                 <div className="mb-4">
                     <h2>Sign Up</h2>
                     <p>It&apos;s quick and easy.</p>
