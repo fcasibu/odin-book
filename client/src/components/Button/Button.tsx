@@ -44,7 +44,7 @@ const Button = ({
 }: Props) => {
     return (
         <button
-            className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:opacity-80 active:opacity-100 transition-all ease-linear self-start w-full`}
+            className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:opacity-80 active:opacity-100 transition-all ease-linear self-start ${size === "none" ? "" : "w-full"}`}
             onClick={onClick}
             type={type}
         >
