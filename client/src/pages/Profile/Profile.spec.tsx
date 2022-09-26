@@ -8,7 +8,8 @@ describe("Profile", () => {
         render(<Profile user={mockUser} />);
         screen.getByAltText("Banner");
         screen.getByAltText("Profile Picture");
-        screen.getByLabelText(mockUser.firstName);
-        screen.getByLabelText(`${mockUser.friends.length} friends`);
+        screen.getByText(mockUser.firstName);
+        screen.getByText(`${mockUser.friends.length} friends`);
+        screen.getAllByRole("listitem");
     });
 });
