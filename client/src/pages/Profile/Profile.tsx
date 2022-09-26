@@ -1,12 +1,15 @@
 import Button from "../../components/Button";
 
-// Just a test user
+// Test types
+type Friend = {
+    id: string;
+}
 type User = {
     firstName: string;
     lastName: string;
     bannerURL: string;
     avatarURL: string;
-    friends: {}[];
+    friends: Friend[];
 };
 
 type Props = {
