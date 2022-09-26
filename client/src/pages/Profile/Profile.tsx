@@ -29,7 +29,7 @@ export const ProfileHeader = ({ user }: Props) => {
                 </div>
                 <div className="flex flex-col items-center lg:flex-row justify-between px-8">
                     <div className="flex flex-col lg:flex-row gap-4">
-                        <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer">
+                        <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer border-[5px] border-white">
                             <img
                                 src={user.avatarURL}
                                 alt="Profile Picture"
@@ -69,8 +69,8 @@ export const ProfileHeader = ({ user }: Props) => {
                     </div>
                 </div>
                 <nav>
-                    <ul className="flex justify-center gap-8">
-                        <li className="p-4 border-sky-500 border-b-2 cursor-pointer">
+                    <ul className="flex justify-center gap-8 text-gray-500 font-bold">
+                        <li className="p-4 border-sky-500 border-b-2 cursor-pointer text-sky-500 font-bold">
                             <a>Posts</a>
                         </li>
                         <li className="p-4 cursor-pointer">
