@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comment should render and match the snapshot 1`] = `
+<div>
+  <div
+    class="flex flex-col gap-2"
+  >
+    <div
+      class="flex gap-2"
+    >
+      <div
+        class="rounded-full h-fit max-w-[30px] md:max-w-[40px] overflow-hidden cursor-pointer"
+      >
+        <img
+          class="object-cover"
+          src="https://avatars.githubusercontent.com/u/75290989?s=400&v=4"
+        />
+      </div>
+      <div
+        class="flex flex-col gap-2"
+      >
+        <div
+          class="bg-gray-100 px-3 py-2 rounded-lg text-xs md:text-sm w-fit relative"
+        >
+          <h4
+            class="font-bold"
+          >
+            John Doe
+          </h4>
+          <p
+            class="leading-2"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+          <div
+            class="absolute right-2 bottom-[-10px] bg-white rounded-full px-1 shadow-md text-gray-600"
+          >
+            X 8
+          </div>
+        </div>
+        <div
+          class="flex gap-2 pl-2 text-xs text-gray-600"
+        >
+          <button
+            class="bg-none text-sky-700 font-bold rounded-md p-0 hover:opacity-80 active:opacity-100 transition-all ease-linear self-start "
+            type="button"
+          >
+             
+            Like
+          </button>
+          <button
+            class="bg-none text-sky-700 font-bold rounded-md p-0 hover:opacity-80 active:opacity-100 transition-all ease-linear self-start "
+            type="button"
+          >
+             
+            Reply
+          </button>
+          <span
+            class="text-gray-600"
+          >
+            1h
+          </span>
+        </div>
+      </div>
+    </div>
+    <div
+      class="pl-14"
+    />
+  </div>
+</div>
+`;

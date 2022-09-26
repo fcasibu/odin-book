@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Post should render and match the snapshot 1`] = `
+<div>
+  <div
+    class="bg-white rounded-md p-4 shadow-md flex flex-col gap-2"
+  >
+    <div
+      class="flex justify-between"
+    >
+      <div
+        class="flex gap-2"
+      >
+        <div
+          class="rounded-full max-w-[40px] overflow-hidden cursor-pointer"
+        >
+          <img
+            class="object-cover"
+            src="https://avatars.githubusercontent.com/u/75290989?s=400&v=4"
+          />
+        </div>
+        <div
+          class="flex flex-col cursor-pointer"
+        >
+          <span
+            class="font-semibold text-sm"
+          >
+            John Doe
+          </span>
+          <span
+            class="text-slate-500 text-xs"
+          >
+            September 18 at 4:44 PM
+          </span>
+        </div>
+      </div>
+      <button
+        class="font-bold text-md self-start"
+      >
+        ...
+      </button>
+    </div>
+    <div>
+      <p
+        class="text-sm"
+      >
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+    </div>
+    <div
+      class="mx-[-16px] cursor-pointer"
+    >
+      <img
+        alt=""
+        class="object-cover w-full"
+        src="https://picsum.photos/536/354"
+      />
+    </div>
+    <div
+      class="flex justify-between items-center text-sm text-slate-500"
+    >
+      <span
+        class="cursor-pointer"
+      >
+        Carl, Mary, and 18 others
+      </span>
+      <span
+        class="cursor-pointer"
+      >
+        3 Comment
+      </span>
+    </div>
+    <div
+      class="flex justify-center items-center border-y-2 border-gray-100"
+    >
+      <button
+        class="text-sm w-full rounded-md p-2 hover:bg-slate-100 active:bg-slate-200"
+      >
+        Like
+      </button>
+      <button
+        class="text-sm w-full rounded-md p-2 hover:bg-slate-100 active:bg-slate-200"
+      >
+        Comment
+      </button>
+    </div>
+     
+    <div
+      class="flex gap-2"
+    >
+      <div
+        class="rounded-full h-fit w-[40px] overflow-hidden cursor-pointer"
+      >
+        <img
+          class="object-cover"
+          src="https://avatars.githubusercontent.com/u/75290989?s=400&v=4"
+        />
+      </div>
+      <form
+        class="flex flex-col gap-2 w-full"
+      >
+        <label
+          for="comment"
+        >
+          <textarea
+            class="w-full rounded-sm p-2 border-2 focus:outline-sky-500 resize-none no-scrollbar"
+            id="comment"
+            name="comment"
+          />
+        </label>
+      </form>
+    </div>
+  </div>
+</div>
+`;

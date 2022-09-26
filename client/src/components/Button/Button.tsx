@@ -34,10 +34,17 @@ type Props = {
     type?: "button" | "submit" | "reset";
 };
 
-const Button = ({ children, size = "md", variant = "default", text = "white", type = "button", onClick }: Props) => {
+const Button = ({
+    children,
+    size = "md",
+    variant = "default",
+    text = "white",
+    type = "button",
+    onClick,
+}: Props) => {
     return (
         <button
-            className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:scale-[.98] active:scale-[.95] transition-all ease-linear`}
+            className={`${colors[variant]} ${textColors[text]} font-bold rounded-md ${padding[size]} hover:opacity-80 active:opacity-100 transition-all ease-linear self-start ${size === "none" ? "" : "w-full"}`}
             onClick={onClick}
             type={type}
         >
