@@ -10,6 +10,6 @@ describe("Profile", () => {
         screen.getByAltText("Profile Picture");
         screen.getByText(mockUser.firstName);
         screen.getByText(`${mockUser.friends.length} friends`);
-        screen.getAllByRole("listitem");
+        expect(screen.getAllByRole("listitem")).toHaveLength(3);
     });
 });
