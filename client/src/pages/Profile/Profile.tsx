@@ -1,4 +1,5 @@
 import Button from "../../components/Button";
+import Card from "../../components/Card";
 
 // Test types
 type Friend = {
@@ -29,7 +30,7 @@ export const ProfileHeader = ({ user }: Props) => {
                 </div>
                 <div className="flex flex-col items-center lg:flex-row justify-between px-8">
                     <div className="flex flex-col lg:flex-row gap-4">
-                        <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer border-[5px] border-white">
+                        <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer border-[5px] border-white self-center">
                             <img
                                 src={user.avatarURL}
                                 alt="Profile Picture"
@@ -86,12 +87,63 @@ export const ProfileHeader = ({ user }: Props) => {
     );
 };
 
-const Profile = ({ user }: Props) => {
+export const ProfileBodySidebar = ({ user }: { user: User }) => {
     return (
-        <div className="flex flex-col gap-2">
-            <ProfileHeader user={user} />
+        <div className="flex flex-col gap-4 w-full">
+            <Card className="max-h-[300px]">
+                <h3 className="font-bold text-lg">Intro</h3>
+            </Card>
+            <Card className="max-h-[300px]">
+                <div className="flex justify-between">
+                    <div>
+                        <h3 className="font-bold text-lg">Friends</h3>
+                        <span className="text-gray-600 text-sm">{user.friends.length} friends</span>
+                    </div>
+                    <a className="text-sky-600 text-sm">See All Friends</a>
+                </div>
+            </Card>
+            <Card className="max-h-[300px]">
+                <div className="flex justify-between items-center">
+                    <h3 className="font-bold text-lg">Collection</h3>
+                    <a className="text-sky-600 text-sm">See All Collection</a>
+                </div>
+            </Card>
         </div>
     );
 };
 
-export default Profile;
+// Refactor
+export const ProfileBodyPosts = ({ user }: { user: User }) => {
+    return (
+        <div>
+            <Card>
+                <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer border-[5px] border-white self-center">
+                    <img src={user.avatarURL} alt="Profile Picture" className="object-cover" />
+                </div>
+                <button className="rounded-full bg-gray-200">What&apos;s on your mind?</button>
+            </Card>
+        </div>
+    );
+};
+
+export const ProfileBody = ({ children }: { children: React.ReactNode }) => {
+    return (
+        <div className="flex flex-col gap-4 items-center">
+            {children}
+        </div>
+    );
+};
+
+export const Profile = ({ user }: Props) => {
+    return (
+        <div className="flex flex-col gap-8">
+            <ProfileHeader user={user} />
+            <div className="px-4">
+                <ProfileBody>
+                    <ProfileBodySidebar user={user} />
+                    <ProfileBodyPosts user={user} />
+                </ProfileBody>
+            </div>
+        </div>
+    );
+};

@@ -1,16 +1,17 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Profile, { ProfileHeader } from "./Profile";
+import { ProfileBodySidebar, ProfileHeader } from "./Profile";
+
+const mockUser = {
+    firstName: "John",
+    lastName: "Doe",
+    friends: [{ id: "2" }],
+    bannerURL: "",
+    avatarURL: "",
+};
 
 describe("Profile", () => {
     it("should render the banner, profile picture, name, friends, and navigation", () => {
-        const mockUser = {
-            firstName: "John",
-            lastName: "Doe",
-            friends: [{ id: "2" }],
-            bannerURL: "",
-            avatarURL: "",
-        };
         render(<ProfileHeader user={mockUser} />);
         screen.getByAltText("Banner");
         screen.getByAltText("Profile Picture");
@@ -18,4 +19,11 @@ describe("Profile", () => {
         screen.getByText(`${mockUser.friends.length} friends`);
         expect(screen.getAllByRole("listitem")).toHaveLength(3);
     });
+
+    it("should render the info, friends, and collections card in the sidebar", () => {
+        render(<ProfileBodySidebar user={mockUser} />);
+        screen.getByText("Intro")
+        screen.getByText("Friends")
+        screen.getByText("Collection");
+    })
 });
