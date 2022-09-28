@@ -1,5 +1,6 @@
 import Button from "../../components/Button";
 import Card from "../../components/Card";
+import Post from "../../components/Post";
 
 // Test types
 type Friend = {
@@ -89,23 +90,26 @@ export const ProfileHeader = ({ user }: Props) => {
 
 export const ProfileBodySidebar = ({ user }: { user: User }) => {
     return (
-        <div className="flex flex-col gap-4 w-full">
-            <Card className="max-h-[300px]">
+        <div className="flex flex-col gap-4 w-full flex-[0.7]">
+            <Card className="h-fit">
                 <h3 className="font-bold text-lg">Intro</h3>
+                <p className="text-sm">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
             </Card>
-            <Card className="max-h-[300px]">
-                <div className="flex justify-between">
+            <Card className="h-fit">
+                <div className="flex justify-between mb-2">
                     <div>
                         <h3 className="font-bold text-lg">Friends</h3>
                         <span className="text-gray-600 text-sm">{user.friends.length} friends</span>
                     </div>
-                    <a className="text-sky-600 text-sm">See All Friends</a>
+                    <a className="text-sky-600 text-sm cursor-pointer">See All Friends</a>
                 </div>
             </Card>
-            <Card className="max-h-[300px]">
-                <div className="flex justify-between items-center">
+            <Card className="h-fit">
+                <div className="flex justify-between items-center mb-2">
                     <h3 className="font-bold text-lg">Collection</h3>
-                    <a className="text-sky-600 text-sm">See All Collection</a>
+                    <a className="text-sky-600 text-sm cursor-pointer">See All Collection</a>
                 </div>
             </Card>
         </div>
@@ -115,20 +119,21 @@ export const ProfileBodySidebar = ({ user }: { user: User }) => {
 // Refactor
 export const ProfileBodyPosts = ({ user }: { user: User }) => {
     return (
-        <div>
-            <Card>
-                <div className="rounded-full max-w-[150px] overflow-hidden cursor-pointer border-[5px] border-white self-center">
+        <div className="w-full flex flex-col gap-4 flex-1">
+            <Card className="flex items-center gap-2">
+                <div className="rounded-full max-w-[50px] overflow-hidden cursor-pointer border-[5px] border-white self-center">
                     <img src={user.avatarURL} alt="Profile Picture" className="object-cover" />
                 </div>
-                <button className="rounded-full bg-gray-200">What&apos;s on your mind?</button>
+                <button className="rounded-full bg-gray-100 text-gray-400 w-full text-left p-2 hover:bg-gray-200 transition-colors ease-linear">What&apos;s on your mind?</button>
             </Card>
+            <Post> </Post>
         </div>
     );
 };
 
 export const ProfileBody = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="flex flex-col gap-4 items-center">
+        <div className="container mx-auto max-w-[900px] flex flex-col gap-4 items-center px-4 lg:flex-row lg:items-start">
             {children}
         </div>
     );
@@ -138,12 +143,10 @@ export const Profile = ({ user }: Props) => {
     return (
         <div className="flex flex-col gap-8">
             <ProfileHeader user={user} />
-            <div className="px-4">
-                <ProfileBody>
-                    <ProfileBodySidebar user={user} />
-                    <ProfileBodyPosts user={user} />
-                </ProfileBody>
-            </div>
+            <ProfileBody>
+                <ProfileBodySidebar user={user} />
+                <ProfileBodyPosts user={user} />
+            </ProfileBody>
         </div>
     );
 };
