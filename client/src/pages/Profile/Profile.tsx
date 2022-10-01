@@ -1,6 +1,6 @@
 import Button from "../../components/Button";
 import Card from "../../components/Card";
-import Post from "../../components/Post";
+import { Post } from "../../components/Post";
 
 // Test types
 type Friend = {
