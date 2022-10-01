@@ -9,7 +9,7 @@ type PostBodyProps = {
     postImage?: string;
 };
 
-const PostHeader = () => {
+export const PostHeader = () => {
     return (
         <div className="flex justify-between">
             <div className="flex gap-2">
@@ -29,7 +29,7 @@ const PostHeader = () => {
     );
 };
 
-const PostBody = ({ postImage }: PostBodyProps) => {
+export const PostBody = ({ postImage }: PostBodyProps) => {
     return (
         <>
             <div>
@@ -63,7 +63,7 @@ const PostBody = ({ postImage }: PostBodyProps) => {
     );
 };
 
-const PostCommentBox = () => {
+export const PostCommentBox = () => {
     return (
         <div className="flex gap-2">
             <div className="rounded-full h-fit w-[40px] overflow-hidden cursor-pointer">
@@ -79,7 +79,7 @@ const PostCommentBox = () => {
     );
 };
 
-const Post = ({ children }: PostProps) => {
+export const Post = ({ children }: PostProps) => {
     return (
         <Card className="flex flex-col gap-2">
             <PostHeader />
@@ -89,5 +89,3 @@ const Post = ({ children }: PostProps) => {
         </Card>
     );
 };
-
-export default Post;

@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Post from "./Post";
+import { Post } from "./Post";
 
 describe("Post", () => {
     it("should render and match the snapshot", () => {
